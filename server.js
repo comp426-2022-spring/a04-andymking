@@ -94,10 +94,8 @@ app.get('/app/err', (req, res) => {
 
 
 app.get('/app/log/access', (req, res) => {
-    if (args['debug'] == 'true') {
-        const stmt = db.prepare('SELECT * FROM accesslog').all()
-        res.status(200).json(stmt)
-    }
+    const stmt = db.prepare('SELECT * FROM accesslog').all()
+    res.status(200).json(stmt)
 });
 
 app.get('/app/flip', (req, res) => {
