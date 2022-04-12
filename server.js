@@ -85,11 +85,7 @@ app.get('/app', (req, res) => {
 })
 
 app.get("/app/error", (req, res) => {	
-    if (args['debug'] == 'true') {
-        throw new Error('BROKEN') // Express will catch this on its own.
-    } else [
-        
-    ]
+    throw new Error('BROKEN') // Express will catch this on its own.
 });
 
 app.get('/app/err', (req, res) => {
