@@ -3,6 +3,8 @@ const express = require('express')
 const app = express()
 const args = minimist(process.argv)
 const db = require('./database.js');
+const morgan = require('morgan');
+const fs = require('fs');
 
 var port = args['port'] ? args['port'] : 5000
 
@@ -82,17 +84,23 @@ app.get('/app', (req, res) => {
     res.end('200 OK')
 })
 
-app.get("/app/log/access", (req, res) => {	
+app.get("/app/error", (req, res) => {	
     if (args['debug'] == 'true') {
-        try {
-            const stmt = db.prepare('SELECT * FROM accesslog').all()
-            res.status(200).json(stmt)
-        } catch {
-            console.error(e)
-        }
-    } else {
-        res.setHeader('Content-Type', 'text/plain');
-        res.status(404).send('404 Not Found')
+        throw new Error('BROKEN') // Express will catch this on its own.
+    } else [
+        
+    ]
+});
+
+app.get('/app/err', (req, res) => {
+    throw new Error('BROKEN') // Express will catch this on its own.
+})
+
+
+app.get('/app/log/access', (req, res) => {
+    if (args['debug'] == 'true') {
+        const stmt = db.prepare('SELECT * FROM accesslog').all()
+        res.status(200).json(stmt)
     }
 });
 
@@ -123,6 +131,14 @@ app.get('/app/flip/call/tails', (req, res) => {
     res.json(flipACoin('tails'))
 })
 
+if (args['log'] == 'true') {
+    // Use morgan for logging to files
+    // Create a write stream to append (flags: 'a') to a file
+    const writeStream = fs.createWriteStream('access.log', { flags: 'a' })
+    // Set up the access logging middleware
+    app.use(morgan('common', { stream: writeStream }))  
+}
+
 app.use(function(req, res) {
     res.setHeader('Content-Type', 'text/plain');
     res.status(404).send('404 Not Found')
@@ -130,5 +146,5 @@ app.use(function(req, res) {
 
 app.use((err, req, res, next) => {
     console.error(err.stack)
-    res.status(500).send('Something broke!')
+    res.status(500).send('Internal Server Error')
 })
