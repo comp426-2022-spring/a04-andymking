@@ -1,0 +1,26 @@
+{
+  "name": "a04-andymking",
+  "version": "1.0.0",
+  "description": "set up and interact with a database using Express.js and better-sqlite.",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/comp426-2022-spring/a04-andymking.git"
+  },
+  "author": "Andrew M King",
+  "license": "GPL-3.0-or-later",
+  "bugs": {
+    "url": "https://github.com/comp426-2022-spring/a04-andymking/issues"
+  },
+  "homepage": "https://github.com/comp426-2022-spring/a04-andymking#readme",
+  "dependencies": {
+    "better-sqlite3": "^7.5.0",
+    "express": "^4.17.3",
+    "minimist": "^1.2.6",
+    "morgan": "^1.10.0"
+  }
+}
